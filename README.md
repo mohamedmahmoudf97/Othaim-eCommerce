@@ -6,41 +6,35 @@ A modern e-commerce web application built with Next.js, TypeScript, and Tailwind
 
 The application follows a clean architecture approach with separation of concerns:
 
-- **src/app/** - Next.js App Router structure with pages for products, cart, and checkout
-- **src/components/** - Reusable UI components (Button, ProductCard, CartItem, Header)
-- **src/data/** - API helpers and services for data fetching
-- **src/lib/** - Business logic, hooks, and state management
-- **src/tests/** - Test files organized by components, lib, and pages
-
-## Features
-
-- Product listing with search and category filtering
-- Shopping cart management with Zustand state management
-- Checkout process with form validation
-- Order confirmation
-- Responsive design for all device sizes
-- Offline functionality with local storage caching
-- API integration with the Fake Store API
-
-## Technologies Used
-
-### Core Technologies
-
-- **Next.js 15** - React framework with App Router for server and client components
-- **TypeScript** - For type safety and better developer experience
-- **Tailwind CSS** - For styling and responsive design
-
-### State Management & Data Fetching
-
-- **Zustand** - Lightweight state management solution
-  - *Why Zustand?* Chosen for its simplicity, small bundle size, and ease of integration with React hooks compared to Redux or Context API
-- **Axios** - For API requests
-  - *Why Axios?* Provides a simple API, automatic JSON transformation, and better error handling than fetch
-
-### Offline Functionality
-
-- **LocalStorage** - For caching product data and cart state
-  - *Why LocalStorage?* Simple to implement and sufficient for the application's needs. For a more robust solution, IndexedDB could be used in the future.
+```
+othaim-ecommerce/
+├── public/             # Static assets
+├── src/
+│   ├── app/            # Next.js App Router pages
+│   │   ├── checkout/   # Checkout and confirmation pages
+│   │   ├── products/   # Product listing and details
+│   │   └── cart/       # Shopping cart page
+│   ├── components/     # Reusable UI components
+│   │   ├── Button.tsx
+│   │   ├── Header.tsx
+│   │   ├── ProductCard.tsx
+│   │   └── CartItem.tsx
+│   ├── data/           # API services and data fetching
+│   │   └── api.ts      # Axios instance and API helpers
+│   ├── lib/            # Business logic and state management
+│   │   ├── store.ts    # Zustand store for cart management
+│   │   ├── types.ts    # TypeScript type definitions
+│   │   └── hooks/      # Custom React hooks
+│   └── tests/          # Test files
+│       ├── components/ # Component tests
+│       ├── data/       # API service tests
+│       ├── lib/        # Store and hooks tests
+│       └── pages/      # Page component tests
+├── jest.config.ts      # Jest configuration
+├── jest.setup.ts       # Test setup and global mocks
+├── tailwind.config.js  # Tailwind CSS configuration
+└── tsconfig.json       # TypeScript configuration
+```
 
 ## Getting Started
 
@@ -52,11 +46,15 @@ The application follows a clean architecture approach with separation of concern
 ### Environment Setup
 
 1. Clone the repository
-2. Create a `.env.local` file in the root directory with the following variables:
+   ```bash
+   git clone https://github.com/yourusername/othaim-ecommerce.git
+   cd othaim-ecommerce
+   ```
 
-```
-NEXT_PUBLIC_API_BASE_URL=https://fakestoreapi.com
-```
+2. Create a `.env.local` file in the root directory with the following variables:
+   ```
+   NEXT_PUBLIC_API_BASE_URL=https://fakestoreapi.com
+   ```
 
 ### Installation
 
@@ -77,25 +75,101 @@ yarn dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the application.
 
-## Testing
+## Technologies and Packages
 
-The application follows Test-Driven Development (TDD) principles. Tests are organized in the `src/tests` directory, mirroring the structure of the application code.
+### Core Technologies
+
+- **Next.js 15** - React framework with App Router for server and client components
+  - Chosen for its hybrid rendering capabilities, built-in routing, and optimized performance
+  - App Router provides a more intuitive file-based routing system
+
+- **TypeScript** - For type safety and better developer experience
+  - Enables early error detection and improves code maintainability
+  - Configured with strict mode for maximum type safety
+
+- **Tailwind CSS** - For styling and responsive design
+  - Utility-first approach speeds up development
+  - Reduces CSS bundle size through PurgeCSS integration
+  - Consistent design system across the application
+
+### State Management & Data Fetching
+
+- **Zustand** - Lightweight state management solution
+  - Chosen for its simplicity compared to Redux
+  - Smaller bundle size (2KB vs Redux's 42KB)
+  - Easy integration with React hooks
+  - Immutable state updates with immer integration
+  - Persistence with localStorage for cart state
+
+- **Axios** - For API requests
+  - Consistent interface across browsers
+  - Request/response interception capabilities
+  - Automatic JSON transformation
+  - Better error handling than native fetch
+
+### Testing Tools
+
+- **Jest** - JavaScript testing framework
+  - Fast parallel test execution
+  - Built-in code coverage reports
+  - Snapshot testing capabilities
+
+- **React Testing Library** - Component testing utilities
+  - Encourages testing from a user perspective
+  - Avoids testing implementation details
+  - Simulates real user interactions
+
+## Testing Approach
+
+The application follows Test-Driven Development (TDD) principles, where tests are written before implementation code. The testing strategy includes:
+
+### Unit Tests
+
+- **Component Tests**: Verify that UI components render correctly and respond to user interactions
+  - Button component tests ensure proper rendering and click handling
+  - ProductCard tests verify product information display and add-to-cart functionality
+  - Header tests check navigation links and cart icon behavior
+
+- **Store Tests**: Validate state management logic
+  - Cart operations (add, remove, update quantity)
+  - Total price calculations
+  - Persistence with localStorage
+
+- **Service Tests**: Ensure API interactions work correctly
+  - Product fetching and error handling
+  - Mock API responses for consistent testing
+
+### Integration Tests
+
+- **Page Tests**: Test complete page components with their dependencies
+  - Checkout page tests validate form submission and validation
+  - Product listing tests verify filtering and sorting functionality
+
+### Test Coverage Areas
+
+The tests cover:
+- Component rendering and user interactions
+- State management operations
+- Form validation logic
+- API service functions
+- Navigation and routing
+- Error states and loading indicators
 
 ### Running Tests
 
 ```bash
+# Run all tests
 npm test
-# or
-yarn test
+
+# Run tests with coverage report
+npm test -- --coverage
+
+# Run tests in watch mode during development
+npm test -- --watch
+
+# Run specific test file
+npm test -- src/tests/components/Button.test.tsx
 ```
-
-### Test Coverage
-
-The tests cover:
-- Component rendering and interactions
-- State management logic
-- API service functions
-- Hooks behavior
 
 ## Deployment
 
@@ -111,12 +185,13 @@ yarn build
 
 ## Future Improvements
 
-- Implement user authentication
-- Add product details page
+- Implement user authentication and account management
+- Add product details page with related products
 - Enhance offline capabilities with service workers
-- Add more payment options
-- Implement order history
-- Add product reviews
+- Add more payment options and integration with payment gateways
+- Implement order history and tracking
+- Add product reviews and ratings system
+- Optimize image loading with Next.js Image optimization
 
 ## License
 
